@@ -1,0 +1,13 @@
+# 컴파일 산출물
+out/
+dist/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.cursor/
+
+# OS
+Thumbs.db
+.DS_Store

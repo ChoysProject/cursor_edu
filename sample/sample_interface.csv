@@ -1,0 +1,18 @@
+인터페이스ID,인터페이스명,인터페이스타입,서비스ID,서비스명,인터페이스쿼리,선처리입력값,후처리입력값,소스파일명,소스경로,타겟파일명,타겟경로,모델구분,필드명,필드타입,필드길이,키타입,매핑모델여부
+IF_001,[온라인]리스크관리(RVS)->코어(COR) 회원정보 리스트 조회 전송 (DB-DB),DB-DB,SVC_001,회원정보조회서비스,"SELECT MEMBER_ID, MEMBER_NM FROM TB_MEMBER WHERE MEMBER_ID = :MEMBER_ID",MEMBER_ID,,,,,, 인터페이스모델,MEMBER_ID,VARCHAR,20,PK,Y
+IF_001,[온라인]리스크관리(RVS)->코어(COR) 회원정보 리스트 조회 전송 (DB-DB),DB-DB,SVC_001,회원정보조회서비스,"SELECT MEMBER_ID, MEMBER_NM FROM TB_MEMBER WHERE MEMBER_ID = :MEMBER_ID",MEMBER_ID,,,,,,인터페이스모델,MEMBER_NM,VARCHAR,100,,Y
+IF_001,[온라인]리스크관리(RVS)->코어(COR) 회원정보 리스트 조회 전송 (DB-DB),DB-DB,SVC_001,회원정보조회서비스,"SELECT MEMBER_ID, MEMBER_NM FROM TB_MEMBER WHERE MEMBER_ID = :MEMBER_ID",MEMBER_ID,,,,,,서비스모델,TGT_MEMBER_ID,VARCHAR,20,PK,Y
+IF_001,[온라인]리스크관리(RVS)->코어(COR) 회원정보 리스트 조회 전송 (DB-DB),DB-DB,SVC_001,회원정보조회서비스,"SELECT MEMBER_ID, MEMBER_NM FROM TB_MEMBER WHERE MEMBER_ID = :MEMBER_ID",MEMBER_ID,,,,,,서비스모델,TGT_MEMBER_NM,VARCHAR,100,,Y
+IF_002,[배치]리스크관리(RVS)->코어(COR) 파일 업로드 처리 전송 (FILE-DB),FILE-DB,SVC_002,파일업로드서비스,,,RESULT_CODE,,,,, 인터페이스모델,FILE_GROUP,GROUP,,,Y
+IF_002,[배치]리스크관리(RVS)->코어(COR) 파일 업로드 처리 전송 (FILE-DB),FILE-DB,SVC_002,파일업로드서비스,,,RESULT_CODE,,,,,인터페이스모델,FILE_NM,VARCHAR,200,,Y
+IF_002,[배치]리스크관리(RVS)->코어(COR) 파일 업로드 처리 전송 (FILE-DB),FILE-DB,SVC_002,파일업로드서비스,,,RESULT_CODE,,,,,서비스모델,TGT_FILE_NM,VARCHAR,200,,Y
+IF_003,[배치]리스크관리(RVS)->코어(COR) 주문정보 전송 (DB-FILE),DB-FILE,SVC_003,주문정보전송서비스,"SELECT ORDER_ID, ORDER_DT FROM TB_ORDER WHERE ORDER_DT = :ORDER_DT",ORDER_DT,FILE_PATH,,,,,인터페이스모델,ORDER_ID,NUMBER,10,PK,Y
+IF_003,[배치]리스크관리(RVS)->코어(COR) 주문정보 전송 (DB-FILE),DB-FILE,SVC_003,주문정보전송서비스,"SELECT ORDER_ID, ORDER_DT FROM TB_ORDER WHERE ORDER_DT = :ORDER_DT",ORDER_DT,FILE_PATH,,,,,인터페이스모델,ORDER_DT,DATE,,,Y
+IF_003,[배치]리스크관리(RVS)->코어(COR) 주문정보 전송 (DB-FILE),DB-FILE,SVC_003,주문정보전송서비스,"SELECT ORDER_ID, ORDER_DT FROM TB_ORDER WHERE ORDER_DT = :ORDER_DT",ORDER_DT,FILE_PATH,,,,,서비스모델,FILE_GROUP,GROUP,,,Y
+IF_003,[배치]리스크관리(RVS)->코어(COR) 주문정보 전송 (DB-FILE),DB-FILE,SVC_003,주문정보전송서비스,"SELECT ORDER_ID, ORDER_DT FROM TB_ORDER WHERE ORDER_DT = :ORDER_DT",ORDER_DT,FILE_PATH,,,,,서비스모델,ORDER_FILE_NM,VARCHAR,200,,Y
+IF_004,[디퍼드]리스크관리(RVS)->코어(COR) 파일 복사 처리 전송 (FILE-FILE),FILE-FILE,SVC_004,파일복사서비스,,,,매출데이터.csv,/data/source/,결과데이터.csv,/data/target/,,,,,
+IF_ERR_01,[배치]리스크관리(RVS)->코어(COR) 오류케이스 GROUP없음 전송 (FILE-DB),FILE-DB,SVC_ERR_01,GROUP없음서비스,,,,,,,,인터페이스모델,FILE_NM,VARCHAR,200,,Y
+IF_ERR_02,[배치]리스크관리(RVS)->코어(COR) 오류케이스 GROUP없음 전송 (DB-FILE),DB-FILE,SVC_ERR_02,GROUP없음서비스,"SELECT 1 FROM DUAL",,,,,,, 서비스모델,OUT_NM,VARCHAR,100,,Y
+IF_ERR_03,[배치]리스크관리(RVS)->코어(COR) 오류케이스 매핑없음 전송 (DB-DB),DB-DB,SVC_ERR_03,매핑없음서비스,"SELECT 1 FROM DUAL",,,,,,,인터페이스모델,FIELD_1,VARCHAR,50,PK,N
+IF_ERR_04,[디퍼드]리스크관리(RVS)->코어(COR) 오류케이스 파일정보없음 전송 (FILE-FILE),FILE-FILE,SVC_ERR_04,파일정보없음서비스,,,,,,,,, ,,,,,
+IF_ERR_05,서비스없는인터페이스,DB-DB,,,"SELECT 1 FROM DUAL",,,,,,,인터페이스모델,FIELD_1,VARCHAR,50,PK,Y
