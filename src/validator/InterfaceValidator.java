@@ -443,6 +443,28 @@ public class InterfaceValidator {
             }
         }
 
+        // ── 4. 인터페이스모델 vs 서비스모델 PK 개수 일치 ─────────────
+        // FILE-FILE 은 필드 자체가 없으므로 제외
+        if (!"FILE-FILE".equals(itype)) {
+            long ifacePkCnt = rows.stream()
+                    .filter(r -> "인터페이스모델".equals(
+                            r.data.getOrDefault("모델구분", "").trim()))
+                    .filter(r -> "PK".equalsIgnoreCase(
+                            r.data.getOrDefault("키타입", "").trim()))
+                    .count();
+            long svcPkCnt = rows.stream()
+                    .filter(r -> "서비스모델".equals(
+                            r.data.getOrDefault("모델구분", "").trim()))
+                    .filter(r -> "PK".equalsIgnoreCase(
+                            r.data.getOrDefault("키타입", "").trim()))
+                    .count();
+            if (ifacePkCnt != svcPkCnt) {
+                results.add(error(firstRowNum, firstRow, "PK 개수 일치 검증",
+                        "[" + ifaceId + "] 인터페이스모델 PK 개수(" + ifacePkCnt
+                        + ")와 서비스모델 PK 개수(" + svcPkCnt + ")가 다릅니다."));
+            }
+        }
+
         return results;
     }
 
