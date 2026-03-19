@@ -465,6 +465,38 @@ public class InterfaceValidator {
             }
         }
 
+        // ── 5. [디퍼드] 전용 검증 ────────────────────────────────────
+        // 인터페이스명에서 태그 추출
+        String ifaceName = firstRow.getOrDefault("인터페이스명", "").trim();
+        boolean isDeferred = ifaceName.startsWith("[디퍼드]");
+
+        if (isDeferred) {
+            // ⑤-1. 인터페이스쿼리에 ORDER BY ... ASC 필수
+            String query = firstRow.getOrDefault("인터페이스쿼리", "").trim().toUpperCase();
+            boolean hasOrderByAsc = Pattern.compile("ORDER\\s+BY\\s+.+\\bASC\\b",
+                    Pattern.DOTALL | Pattern.CASE_INSENSITIVE).matcher(query).find();
+            if (query.isEmpty()) {
+                results.add(error(firstRowNum, firstRow, "디퍼드 쿼리 검증",
+                        "[" + ifaceId + "] [디퍼드] 인터페이스는 인터페이스쿼리가 필수입니다."));
+            } else if (!hasOrderByAsc) {
+                results.add(error(firstRowNum, firstRow, "디퍼드 쿼리 검증",
+                        "[" + ifaceId + "] [디퍼드] 인터페이스쿼리에 'ORDER BY ... ASC' 구문이 필수입니다."));
+            }
+
+            // ⑤-2. 서비스모델에 TABLESEQ 또는 TABLEDATE 필드 필수
+            boolean hasSeqOrDate = rows.stream()
+                    .filter(r -> "서비스모델".equals(
+                            r.data.getOrDefault("모델구분", "").trim()))
+                    .anyMatch(r -> {
+                        String fn = r.data.getOrDefault("필드명", "").trim().toUpperCase();
+                        return "TABLESEQ".equals(fn) || "TABLEDATE".equals(fn);
+                    });
+            if (!hasSeqOrDate) {
+                results.add(error(firstRowNum, firstRow, "디퍼드 서비스모델 검증",
+                        "[" + ifaceId + "] [디퍼드] 서비스모델에 'TABLESEQ' 또는 'TABLEDATE' 필드가 반드시 있어야 합니다."));
+            }
+        }
+
         return results;
     }
 
