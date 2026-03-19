@@ -62,20 +62,9 @@ public class InterfaceValidator {
             Arrays.asList("배치", "디퍼드", "온라인");
 
     /**
-     * 시스템 코드 → 시스템명 매핑.
-     * TODO: 사내 시스템 코드/명을 여기에 등록하세요.
-     */
-    private static final Map<String, String> SYSTEM_MAP = new LinkedHashMap<>();
-    static {
-        SYSTEM_MAP.put("RVS", "리스크관리");
-        SYSTEM_MAP.put("COR", "코어");
-        SYSTEM_MAP.put("DPO", "여신");
-        SYSTEM_MAP.put("FND", "펀드");
-    }
-
-    /**
      * 인터페이스명 전체 패턴.
      * [태그]소스시스템명(코드)->타겟시스템명(코드) 설명 전송 (타입)
+     * - 시스템명(코드) 은 형식만 체크하며, 값 자체는 검증하지 않음
      */
     private static final Pattern FULL_NAME_PATTERN = buildNamePattern();
 
@@ -380,10 +369,6 @@ public class InterfaceValidator {
             return results;
         }
 
-        String srcName  = m.group(2);
-        String srcCode  = m.group(3);
-        String tgtName  = m.group(4);
-        String tgtCode  = m.group(5);
         String desc     = m.group(6);
         String nameType = m.group(7);
 
@@ -393,31 +378,7 @@ public class InterfaceValidator {
                     "설명 부분이 '전송' 으로 끝나야 합니다. (현재: '" + desc + "')"));
         }
 
-        // ② 소스 시스템 코드/명 일치
-        String expectedSrc = SYSTEM_MAP.get(srcCode);
-        if (expectedSrc == null) {
-            results.add(error(rowNum, row, "소스시스템 코드 검증",
-                    "등록되지 않은 소스시스템 코드 '" + srcCode
-                    + "' (등록 코드: " + SYSTEM_MAP.keySet() + ")"));
-        } else if (!expectedSrc.equals(srcName)) {
-            results.add(error(rowNum, row, "소스시스템명 검증",
-                    "코드 '" + srcCode + "' 의 시스템명은 '" + expectedSrc
-                    + "' 이어야 합니다. (입력값: '" + srcName + "')"));
-        }
-
-        // ③ 타겟 시스템 코드/명 일치
-        String expectedTgt = SYSTEM_MAP.get(tgtCode);
-        if (expectedTgt == null) {
-            results.add(error(rowNum, row, "타겟시스템 코드 검증",
-                    "등록되지 않은 타겟시스템 코드 '" + tgtCode
-                    + "' (등록 코드: " + SYSTEM_MAP.keySet() + ")"));
-        } else if (!expectedTgt.equals(tgtName)) {
-            results.add(error(rowNum, row, "타겟시스템명 검증",
-                    "코드 '" + tgtCode + "' 의 시스템명은 '" + expectedTgt
-                    + "' 이어야 합니다. (입력값: '" + tgtName + "')"));
-        }
-
-        // ④ 인터페이스명 내 타입 vs 컬럼 타입 일치
+        // ② 인터페이스명 내 타입 vs 컬럼 타입 일치
         if (!itype.isEmpty() && !nameType.equals(itype)) {
             results.add(error(rowNum, row, "인터페이스명-타입 일치 검증",
                     "인터페이스명 끝 타입 '" + nameType
